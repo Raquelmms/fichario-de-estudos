@@ -1,14 +1,17 @@
-// Servidor local do caderno. Só existe enquanto `npm run dev` está rodando:
+// Servidor local do fichário. Só existe enquanto `npm run dev` está rodando:
 //   GET    /api/dados             → tudo que está em dados/ (lido do disco na hora)
 //   PUT    /api/dados/<arquivo>   → grava um JSON em dados/
 //   DELETE /api/dados/<arquivo>   → apaga um JSON de dados/
 //   GET    /api/conectores        → itens dos conectores ligados (agenda, Linear…)
+//   GET    /api/ia                → se o resumo com IA está ligado
+//   POST   /api/resumir           → resume o material colado de uma aula (precisa de ANTHROPIC_API_KEY)
 // Quando alguém mexe num arquivo de dados/ por fora (editor, Claude Code),
 // a página recebe um aviso e recarrega os dados sozinha.
 
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { resumir, MODELO_PADRAO } from './resumir.mjs'
 
 const lerCorpo = req =>
   new Promise((ok, erro) => {
@@ -35,9 +38,8 @@ const listar = dir => (fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => f.en
 export function lerTudo(raiz) {
   const dados = path.join(raiz, 'dados')
   return {
-    caderno: lerJson(path.join(dados, 'caderno.json')),
-    cursos: listar(path.join(dados, 'cursos')).map(f => ({ ...lerJson(path.join(dados, 'cursos', f)), _arquivo: `cursos/${f}` })),
-    leituras: listar(path.join(dados, 'leituras')).map(f => ({ ...lerJson(path.join(dados, 'leituras', f)), _arquivo: `leituras/${f}` })),
+    fichario: lerJson(path.join(dados, 'fichario.json')),
+    materias: listar(path.join(dados, 'materias')).map(f => ({ ...lerJson(path.join(dados, 'materias', f)), _arquivo: `materias/${f}` })),
   }
 }
 
@@ -108,6 +110,22 @@ export default function pluginCaderno({ raiz, env }) {
           responder(res, 405, { erro: 'método não suportado' })
         } catch (e) {
           responder(res, 500, { erro: e.message })
+        }
+      })
+
+      server.middlewares.use('/api/ia', (req, res) =>
+        responder(res, 200, { ativo: !!env.ANTHROPIC_API_KEY, modelo: env.RESUMO_MODELO || MODELO_PADRAO }),
+      )
+
+      server.middlewares.use('/api/resumir', async (req, res) => {
+        if (req.method !== 'POST') return responder(res, 405, { erro: 'use POST' })
+        if (!env.ANTHROPIC_API_KEY) return responder(res, 400, { erro: 'sem ANTHROPIC_API_KEY no .env.local' })
+        try {
+          const { material, materia, aula } = await lerCorpo(req)
+          if (!material?.trim()) return responder(res, 400, { erro: 'cole o material primeiro' })
+          responder(res, 200, await resumir({ material, materia, aula, env }))
+        } catch (e) {
+          responder(res, 502, { erro: e.message })
         }
       })
 

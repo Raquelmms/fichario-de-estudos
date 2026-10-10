@@ -10,5 +10,6 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), pluginCaderno({ raiz, env: loadEnv(mode, raiz, '') })],
     // dados/ é salvo pelo próprio caderno; o servidor avisa a página quando muda.
     server: { port: 5177, watch: { ignored: ['**/dados/**'] } },
+    build: { chunkSizeWarningLimit: 1500 },
   }
 })

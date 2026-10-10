@@ -1,0 +1,161 @@
+{
+  "id": "git-do-zero",
+  "nome": "Git e GitHub do zero",
+  "professor": "Pro Git (livro)",
+  "emoji": "🌱",
+  "cor": "verde",
+  "capa": {
+    "padrao": "quadriculado",
+    "adesivos": [
+      {
+        "id": "a1",
+        "tipo": "emoji",
+        "valor": "💻",
+        "x": 78,
+        "y": 34,
+        "r": 12,
+        "s": 1
+      },
+      {
+        "id": "a2",
+        "tipo": "selo",
+        "valor": "foco",
+        "cor": "azul",
+        "x": 38,
+        "y": 90,
+        "r": -8,
+        "s": 1
+      },
+      {
+        "id": "a3",
+        "tipo": "fita",
+        "valor": "rosa",
+        "x": 72,
+        "y": 5,
+        "r": 20,
+        "s": 1
+      }
+    ]
+  },
+  "aulas": [
+    {
+      "id": "au1",
+      "titulo": "O que é controle de versão",
+      "data": "2026-10-06",
+      "conteudo": "<h2>Por que controlar versões</h2><p>Sem controle de versão a gente vive de <code>trabalho_final_v2_AGORA_VAI.docx</code>. Um <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">sistema de controle de versão</mark> guarda cada mudança, então dá pra <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">voltar um arquivo ou o projeto inteiro</mark> pra como ele estava antes.</p><ul><li><p><strong>local</strong>: a história fica só no seu computador (o HD morreu, a história foi junto)</p></li><li><p><strong>centralizado</strong>: fica num servidor (servidor fora do ar = ninguém trabalha)</p></li><li><p><strong>distribuído</strong> (Git): <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">cada cópia tem a história inteira</mark></p></li></ul><h2>Fotos, não diferenças</h2><p>A cada commit o Git tira uma <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">foto (snapshot) do projeto inteiro</mark>. Arquivo que não mudou não é copiado de novo, vira só um link pra versão anterior. <mark data-color=\"#a5d8ff\" style=\"background-color: rgb(165, 216, 255); color: inherit;\">Exemplo: git log funciona até sem internet</mark>, porque a história está toda na sua máquina.</p><h2>Os três estados</h2><p>Todo arquivo está em um destes: <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">modified</mark> (mudou), <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">staged</mark> (marcado pro próximo commit) ou <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">committed</mark> (guardado na história). <mark data-color=\"#fcc2d7\" style=\"background-color: rgb(252, 194, 215); color: inherit;\">Isso cai na prova!</mark></p><ol><li><p>você muda arquivos no working directory</p></li><li><p><code>git add</code> leva pra staging area</p></li><li><p><code>git commit</code> guarda a foto no repositório</p></li></ol><p><mark data-color=\"#d0bfff\" style=\"background-color: rgb(208, 191, 255); color: inherit;\">Dúvida: qual a diferença entre git restore e git reset?</mark></p><ul data-type=\"taskList\"><li data-checked=\"true\" data-type=\"taskItem\"><label><input type=\"checkbox\" checked=\"checked\"><span></span></label><div><p>instalar o Git</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>ler o capítulo 1 do Pro Git</p></div></li></ul><p></p>",
+      "postits": [
+        {
+          "id": "p1",
+          "cor": "amarelo",
+          "texto": "lembra assim:\nadd = separar as fotos\ncommit = colar no álbum",
+          "x": 77,
+          "y": 30,
+          "r": 2
+        },
+        {
+          "id": "p2",
+          "cor": "rosa",
+          "texto": "cada clone é um backup completo!",
+          "x": 78,
+          "y": 420,
+          "r": -3
+        }
+      ],
+      "adesivos": [
+        {
+          "id": "s1",
+          "tipo": "selo",
+          "valor": "cai na prova",
+          "cor": "rosa",
+          "x": 86,
+          "y": 640,
+          "r": -10,
+          "s": 1
+        },
+        {
+          "id": "s2",
+          "tipo": "emoji",
+          "valor": "⭐",
+          "x": 96,
+          "y": 250,
+          "r": 0,
+          "s": 0.8
+        }
+      ],
+      "material": "",
+      "teste": [
+        {
+          "p": "Por que o Git é chamado de distribuído?",
+          "r": "Porque cada cópia (clone) tem a história inteira do projeto."
+        },
+        {
+          "p": "O que o Git guarda a cada commit?",
+          "r": "Uma foto (snapshot) do projeto inteiro."
+        },
+        {
+          "p": "Quais são os três estados de um arquivo?",
+          "r": "Modified, staged e committed."
+        },
+        {
+          "p": "Qual comando leva um arquivo pra staging area?",
+          "r": "git add"
+        }
+      ]
+    },
+    {
+      "id": "au2",
+      "titulo": "Comandos do dia a dia",
+      "data": "2026-10-13",
+      "conteudo": "<h2>O ciclo do dia a dia</h2><p><code>git status</code> → <code>git add</code> → <code>git commit</code> → <code>git push</code>. <mark data-color=\"#ffe066\">Na dúvida, rode git status</mark>: ele diz em que pé as coisas estão.</p><p><code>git log --oneline</code> mostra a história resumida, <mark data-color=\"#ffd8a8\">um commit por linha</mark>.</p>",
+      "postits": [],
+      "adesivos": [],
+      "material": "",
+      "teste": []
+    },
+    {
+      "id": "au3",
+      "titulo": "Branches e merge",
+      "data": "2026-10-20",
+      "conteudo": "",
+      "postits": [],
+      "adesivos": [],
+      "material": "",
+      "teste": []
+    }
+  ],
+  "prazos": [
+    {
+      "id": "p1",
+      "titulo": "Exercício: primeiro repositório",
+      "tipo": "tarefa",
+      "data": "2026-10-11T23:59",
+      "peso": 20,
+      "nota": 90,
+      "feito": true
+    },
+    {
+      "id": "p2",
+      "titulo": "Quiz dos comandos",
+      "tipo": "prova",
+      "data": "2026-10-18T23:59",
+      "peso": 20,
+      "feito": false
+    },
+    {
+      "id": "p3",
+      "titulo": "Resolver um conflito de merge",
+      "tipo": "tarefa",
+      "data": "2026-10-25T23:59",
+      "peso": 25,
+      "feito": false
+    },
+    {
+      "id": "p4",
+      "titulo": "Projeto final: PR num repo de amiga",
+      "tipo": "projeto",
+      "data": "2026-11-01T23:59",
+      "peso": 35,
+      "feito": false
+    }
+  ]
+}

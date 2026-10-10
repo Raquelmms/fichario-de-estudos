@@ -3,21 +3,21 @@ import { baixarIcs } from '../ics.js'
 import Campo from '../componentes/Campo.jsx'
 
 export default function Ajustes({ ctx }) {
-  const { dados, mudarCaderno, conectores, recarregarConectores } = ctx
+  const { dados, mudarFichario, conectores, recarregarConectores, ia } = ctx
   return (
     <section className="pagina">
       <h1 className="titulo-mao">Ajustes</h1>
 
       {EDITAVEL && (
         <div className="folha">
-          <h2 className="sub-mao">O caderno</h2>
+          <h2 className="sub-mao">O fichário</h2>
           <label className="dica" style={{ display: 'block' }}>
             título
-            <Campo valor={dados.caderno.titulo} onSalvar={v => mudarCaderno(c => { c.titulo = v })} />
+            <Campo valor={dados.fichario.titulo} onSalvar={v => mudarFichario(f => { f.titulo = v })} />
           </label>
           <label className="dica" style={{ display: 'block', marginTop: 10 }}>
             subtítulo
-            <Campo valor={dados.caderno.subtitulo} onSalvar={v => mudarCaderno(c => { c.subtitulo = v })} />
+            <Campo valor={dados.fichario.subtitulo} onSalvar={v => mudarFichario(f => { f.subtitulo = v })} />
           </label>
           <p className="dica" style={{ marginTop: 14 }}>
             Tudo o que você muda aqui vai pra pasta <code>dados/</code>, em arquivos JSON. Pra guardar uma versão (e mandar pro GitHub),
@@ -26,10 +26,27 @@ export default function Ajustes({ ctx }) {
         </div>
       )}
 
+      {EDITAVEL && (
+        <div className="folha">
+          <h2 className="sub-mao">Resumo com IA {ia.ativo ? <span className="selo selo-ok">ligado · {ia.modelo}</span> : <span className="selo selo-off">desligado</span>}</h2>
+          <p>
+            O botão <b>✨ resumir material</b> de cada aula transforma o texto colado numa página resumida, com grifos coloridos,
+            post-its e teste rápido. Ele usa a API do Claude, que é paga por uso.
+          </p>
+          {!ia.ativo && (
+            <ol>
+              <li>Crie uma chave em <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noreferrer">console.anthropic.com</a>.</li>
+              <li>Coloque <code>ANTHROPIC_API_KEY=sk-ant-…</code> no <code>.env.local</code> e reinicie o <code>npm run dev</code>.</li>
+            </ol>
+          )}
+          <p className="dica">Sem chave? Com o Claude Code aberto na pasta do fichário, use <code>/resumir</code>: ele faz o mesmo direto nos arquivos.</p>
+        </div>
+      )}
+
       <div className="folha">
         <h2 className="sub-mao">Levar os prazos pra sua agenda</h2>
         <p>Baixa um arquivo <code>.ics</code> com todos os prazos (com lembrete 1 dia antes) pra importar no Google Agenda, Outlook ou Apple.</p>
-        <button className="btn" onClick={() => baixarIcs(dados.cursos, dados.caderno.titulo)}>baixar prazos.ics</button>
+        <button className="btn" onClick={() => baixarIcs(dados.materias, dados.fichario.titulo)}>baixar prazos.ics</button>
         <p className="dica">Google Agenda: Configurações → Importar e exportar → Importar.</p>
       </div>
 

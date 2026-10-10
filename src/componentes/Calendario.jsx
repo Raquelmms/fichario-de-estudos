@@ -4,8 +4,8 @@ import { chaveDia, hora } from '../datas.js'
 const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
 const SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb']
 
-// Mês com os prazos dos cursos, os eventos dos conectores e o começo de cada módulo.
-export default function Calendario({ eventos, cursos, compacto = false }) {
+// Mês com os prazos e as aulas das matérias e os eventos dos conectores.
+export default function Calendario({ eventos, materias, compacto = false }) {
   const hoje = new Date()
   const [mes, setMes] = useState(() => new Date(hoje.getFullYear(), hoje.getMonth(), 1))
 
@@ -14,12 +14,6 @@ export default function Calendario({ eventos, cursos, compacto = false }) {
     for (const e of eventos) (m[chaveDia(e.quando)] ||= []).push(e)
     return m
   }, [eventos])
-
-  const inicios = useMemo(() => {
-    const m = {}
-    for (const c of cursos) for (const mod of c.modulos || []) if (mod.inicio) (m[mod.inicio] ||= []).push({ c, mod })
-    return m
-  }, [cursos])
 
   const ano = mes.getFullYear()
   const mesN = mes.getMonth()
@@ -41,20 +35,14 @@ export default function Calendario({ eventos, cursos, compacto = false }) {
           if (!d) return <div key={i} className="cal-dia cal-vazio" />
           const k = chaveDia(d)
           const evs = porDia[k] || []
-          const comeca = inicios[k] || []
           return (
             <div key={i} className={`cal-dia ${k === chaveDia(hoje) ? 'cal-hoje' : ''} ${evs.length ? 'cal-com' : ''}`}>
               <div className="cal-num">
                 <span>{d.getDate()}</span>
-                {comeca.map(({ c, mod }) => (
-                  <span key={c.id} className={`cal-unidade cor-${c.cor}`} title={`${c.nome}: começa o módulo ${mod.n}`}>
-                    M{mod.n}
-                  </span>
-                ))}
               </div>
               <ul className="cal-evs">
                 {evs.map((e, j) => {
-                  const rotulo = `${e.curso ? (e.curso.codigo || e.curso.nome) + ' · ' : ''}${e.titulo}`
+                  const rotulo = `${e.materia ? e.materia.nome + ' · ' : ''}${e.titulo}`
                   const dica = `${rotulo}${e.diaInteiro ? '' : ` · ${hora(e.quando)}`}${e.fonte ? ` · ${e.fonte}` : ''}`
                   const conteudo = <><span aria-hidden="true">{e.feito ? '✓' : e.icone}</span> {compacto ? e.titulo : rotulo}</>
                   const classe = `cal-ev cor-${e.cor} ${e.feito ? 'cal-ev-feito' : ''} ${e.fonte ? 'cal-ev-aviso' : ''}`
@@ -74,8 +62,8 @@ export default function Calendario({ eventos, cursos, compacto = false }) {
         })}
       </div>
       <p className="cal-legenda">
-        {cursos.map(c => <span key={c.id}><span className={`leg cor-${c.cor}`}>{c.codigo || c.nome}</span> </span>)}
-        · M1, M2… = começo de módulo · ✓ = feito{eventos.some(e => e.fonte) && ' · borda tracejada = veio da sua agenda/conectores'}
+        {materias.map(m => <span key={m.id}><span className={`leg cor-${m.cor}`}>{m.nome}</span> </span>)}
+        · 📖 aula · ✓ = feito{eventos.some(e => e.fonte) && ' · borda tracejada = veio da sua agenda/conectores'}
       </p>
     </div>
   )

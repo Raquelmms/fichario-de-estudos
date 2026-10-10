@@ -1,17 +1,18 @@
-# Caderno de estudos
+# Fichário de estudos
 
 App React + Vite. O conteúdo fica todo em `dados/` (JSON); o código raramente precisa mudar.
 Com `npm run dev` rodando, a página recarrega sozinha quando um arquivo de `dados/` muda.
 
 Escreva em português do Brasil. JSON sempre com 2 espaços de indentação e UTF-8 (acentos direto, sem `é`).
+Skills: `/resumir` (resumo de uma aula) e `/nova-materia` (matéria a partir de uma ementa).
 
-## dados/caderno.json
+## dados/fichario.json
 
 ```json
-{ "titulo": "Meu caderno de estudos", "subtitulo": "frase curta" }
+{ "titulo": "Meu fichário", "subtitulo": "frase curta" }
 ```
 
-## dados/cursos/<id>.json
+## dados/materias/<id>.json
 
 O nome do arquivo é o `id` (minúsculas, hífens, sem acento).
 
@@ -19,76 +20,77 @@ O nome do arquivo é o `id` (minúsculas, hífens, sem acento).
 {
   "id": "calculo-1",
   "nome": "Cálculo I",
-  "codigo": "MAT101",            // sigla curta pro menu; opcional
+  "professor": "Ana",
   "emoji": "📐",
-  "cor": "azul",                  // azul · vermelho · verde · roxo · laranja · rosa
-  "onde": "faculdade",            // texto livre; opcional
-  "link": "https://…",            // opcional
-  "modulos": [
+  "cor": "azul",                         // azul · vermelho · verde · roxo · laranja · rosa · amarelo · cinza
+  "capa": {
+    "padrao": "bolinhas",                // liso · bolinhas · listras · xadrez · quadriculado · diagonal
+    "adesivos": [ /* ver Adesivos; x e y em % da capa */ ]
+  },
+  "aulas": [
     {
-      "n": 1,                     // 1, 2, 3… em sequência
+      "id": "k3j9xa",                    // 6 letras/números, único na matéria
       "titulo": "Limites",
-      "inicio": "2026-10-05",     // opcional; com início e fim o caderno sabe o módulo atual
-      "fim": "2026-10-11",
-      "resumo": ["uma ideia por item, aceita **negrito** e `código`"],
-      "chaves": ["palavras", "chave"],
-      "anotacoes": "Markdown livre. - [ ] vira caixinha clicável.",
-      "feito": false
+      "data": "2026-10-05",              // ordena as aulas e aparece no calendário
+      "conteudo": "<h2>…</h2><p>…</p>",  // HTML da página (ver abaixo)
+      "postits": [{ "id": "p1", "cor": "amarelo", "texto": "lembrete\ncom quebra", "x": 77, "y": 30, "r": 2 }],
+      "adesivos": [],                    // x em % da largura, y em px a partir do topo da página
+      "material": "texto colado pra resumir",
+      "teste": [{ "p": "pergunta", "r": "resposta" }]
     }
   ],
   "prazos": [
     {
-      "id": "p1",                 // único dentro do curso
+      "id": "p1",
       "titulo": "Lista 1",
-      "tipo": "tarefa",           // tarefa · prova · leitura · projeto · aula · outro
-      "data": "2026-10-11T23:59", // ou só "2026-10-11" (vale até 23:59)
-      "modulo": 1,                // ou null
-      "peso": 20,                 // opcional; com peso e nota sai a média ponderada
-      "nota": 85,                 // opcional
-      "link": "https://…",        // opcional
+      "tipo": "tarefa",                  // tarefa · prova · leitura · projeto · aula · outro
+      "data": "2026-10-11T23:59",        // ou só "2026-10-11" (vale até 23:59)
+      "peso": 20,                        // opcional; com peso e nota sai a média ponderada
+      "nota": 85,                        // opcional
+      "link": "https://…",               // opcional
       "feito": false
     }
   ]
 }
 ```
 
-## dados/leituras/<curso>-<n>.json (leitura grifada)
+### HTML do `conteudo`
+
+Tags: `<h2>`, `<h3>`, `<p>`, `<ul>`/`<ol>` com `<li><p>…</p></li>`, `<strong>`, `<em>`, `<u>`, `<code>`, `<blockquote>`, `<hr>`.
+Lista de tarefas: `<ul data-type="taskList"><li data-type="taskItem" data-checked="false"><label><input type="checkbox"><span></span></label><div><p>…</p></div></li></ul>`.
+
+Grifo: `<mark data-color="#ffe066">trecho</mark>`. A legenda das cores (em `src/grifos.js`):
+
+| cor | significa |
+|---|---|
+| `#ffe066` amarelo | importante |
+| `#b2f2bb` verde | definição |
+| `#a5d8ff` azul | exemplo |
+| `#fcc2d7` rosa | cai na prova |
+| `#ffd8a8` laranja | data, número ou fórmula |
+| `#d0bfff` lilás | dúvida / revisar |
+
+Caneta colorida: `<span style="color: #2f62c9">…</span>`.
+
+### Post-its
+
+`cor`: amarelo · rosa · azul · verde · laranja · lilas. Na página de aula, `x` é % da largura (77 = margem direita)
+e `y` é px a partir do topo do papel; `r` é a inclinação em graus.
+
+### Adesivos
 
 ```json
-{
-  "curso": "calculo-1",
-  "modulo": 1,
-  "titulo": "Nome do livro ou texto",
-  "autores": "…",
-  "capitulos": "Cap. 2 (pp. 30–45)",
-  "minutos": 15,
-  "link": "https://… (opcional)",
-  "ideia": "A ideia central numa frase, com ==grifo==.",
-  "secoes": [
-    { "id": "slug-curto", "titulo": "Título da seção", "pagina": "30", "blocos": [ … ] }
-  ],
-  "teste": [{ "p": "pergunta", "r": "resposta" }],
-  "referencias": ["Referência no formato que o curso pede (APA, ABNT…)."]
-}
+{ "id": "a1", "tipo": "emoji", "valor": "⭐", "x": 50, "y": 20, "r": -10, "s": 1 }
+{ "id": "a2", "tipo": "selo", "valor": "cai na prova", "cor": "rosa", "x": 80, "y": 300, "r": 6, "s": 1 }
+{ "id": "a3", "tipo": "fita", "valor": "listrada", "x": 50, "y": 4, "r": -4, "s": 1 }
 ```
 
-Texto dentro dos blocos aceita: `==grifo amarelo==` (o mais importante), `++grifo verde++` (definições),
-`**negrito**`, `*itálico*`, `` `código` `` e `\n` pra quebra de linha.
+`s` é a escala (0.5 a 3). Selos e fitas disponíveis estão em `src/componentes/Adesivos.jsx`.
 
-Blocos (`t` = tipo):
+## Resumo com IA
 
-| t | campos | uso |
-|---|---|---|
-| `p` | `texto` | parágrafo |
-| `subtitulo` | `texto` | subtítulo dentro da seção |
-| `def` | `termo`, `original` (citação literal, opcional), `pt` | definição |
-| `postit` | `cor` (amarelo · rosa · azul · verde), `titulo`, `texto` | dica, exemplo ou macete; vai pra margem |
-| `citacao` | `texto`, `fonte` | citação em destaque |
-| `lista` | `itens`, `numerada` | lista |
-| `tabela` | `cab` (array), `linhas` (array de arrays) | comparação |
-| `fluxo` | `passos` (array) | sequência com setas |
-| `codigo` | `texto` | bloco de código |
-| `imagem` | `src`, `alt`, `legenda` | imagem (coloque o arquivo em `public/`) |
+`servidor/resumir.mjs` chama a API do Claude (`claude-opus-5-5`, ou `RESUMO_MODELO` do `.env.local`) com saída
+estruturada `{ titulo, html, postits, teste }`. Só liga com `ANTHROPIC_API_KEY` no `.env.local`.
 
 ## Conectores
 

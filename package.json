@@ -1,8 +1,8 @@
 {
-  "name": "caderno-de-estudos",
+  "name": "fichario-de-estudos",
   "private": true,
   "version": "1.0.0",
-  "description": "Um caderno de estudos que roda no seu computador: cursos, módulos, prazos, anotações e leituras grifadas.",
+  "description": "Um fichário de estudos que roda no seu computador: matérias com capa personalizada, aulas com marca-texto, post-its, adesivos, resumo com IA e prazos.",
   "type": "module",
   "scripts": {
     "dev": "vite --open",
@@ -10,10 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "dompurify": "^3.4.16",
-    "marked": "^18.1.0",
+    "@anthropic-ai/sdk": "^0.133.0",
+    "@tiptap/extension-highlight": "^3.31.4",
+    "@tiptap/extension-list": "^3.31.4",
+    "@tiptap/extension-text-style": "^3.31.4",
+    "@tiptap/extensions": "^3.31.4",
+    "@tiptap/pm": "^3.31.4",
+    "@tiptap/react": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.2",

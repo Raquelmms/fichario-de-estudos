@@ -1,0 +1,70 @@
+{
+  "id": "ingles-para-devs",
+  "nome": "Inglês para devs",
+  "professor": "",
+  "emoji": "🌷",
+  "cor": "rosa",
+  "capa": {
+    "padrao": "bolinhas",
+    "adesivos": [
+      {
+        "id": "b1",
+        "tipo": "emoji",
+        "valor": "✨",
+        "x": 22,
+        "y": 30,
+        "r": 0,
+        "s": 1
+      },
+      {
+        "id": "b2",
+        "tipo": "emoji",
+        "valor": "🎧",
+        "x": 80,
+        "y": 12,
+        "r": -10,
+        "s": 0.9
+      },
+      {
+        "id": "b3",
+        "tipo": "selo",
+        "valor": "arrasei",
+        "cor": "amarelo",
+        "x": 64,
+        "y": 91,
+        "r": 6,
+        "s": 1
+      }
+    ]
+  },
+  "aulas": [
+    {
+      "id": "in1",
+      "titulo": "Vocabulário de reunião",
+      "data": "2026-10-08",
+      "conteudo": "<h2>Frases que salvam</h2><ul><li><p><mark data-color=\"#ffe066\">Could you share your screen?</mark> pode compartilhar a tela?</p></li><li><p><mark data-color=\"#ffe066\">Let me double-check that.</mark> deixa eu confirmar isso.</p></li><li><p><mark data-color=\"#a5d8ff\">I’ll follow up on Slack.</mark> te respondo no Slack depois.</p></li></ul>",
+      "postits": [
+        {
+          "id": "q1",
+          "cor": "azul",
+          "texto": "falar devagar é melhor que falar rápido e errado :)",
+          "x": 76,
+          "y": 40,
+          "r": 3
+        }
+      ],
+      "adesivos": [],
+      "material": "",
+      "teste": []
+    }
+  ],
+  "prazos": [
+    {
+      "id": "q1",
+      "titulo": "Apresentar um PR em inglês",
+      "tipo": "projeto",
+      "data": "2026-10-23",
+      "feito": false
+    }
+  ]
+}

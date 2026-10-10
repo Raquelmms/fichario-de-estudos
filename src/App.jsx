@@ -1,21 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useCaderno, useConectores, eventos as juntarEventos, EDITAVEL } from './dados.js'
+import { useFichario, useConectores, useIA, eventos as juntarEventos, EDITAVEL } from './dados.js'
 import Inicio from './paginas/Inicio.jsx'
-import Curso from './paginas/Curso.jsx'
-import Modulo from './paginas/Modulo.jsx'
+import Materia from './paginas/Materia.jsx'
+import Aula from './paginas/Aula.jsx'
 import Ajustes from './paginas/Ajustes.jsx'
-import Leitura from './componentes/Leitura.jsx'
 import Calendario from './componentes/Calendario.jsx'
-import { leituraDe } from './dados.js'
 
-// Rotas: #/ · #/calendario · #/ajustes · #/curso/<id> · #/curso/<id>/<n> · #/curso/<id>/<n>/leitura
+// Rotas: #/ · #/calendario · #/ajustes · #/m/<matéria> · #/m/<matéria>/<aula>
 const lerRota = () => window.location.hash.replace(/^#\/?/, '').split('/').filter(Boolean)
 
 export default function App() {
   const [rota, setRota] = useState(lerRota)
-  const caderno = useCaderno()
+  const fichario = useFichario()
   const { conectores, recarregar: recarregarConectores } = useConectores()
-  const { dados } = caderno
+  const ia = useIA()
+  const { dados } = fichario
 
   useEffect(() => {
     const f = () => {
@@ -29,52 +28,52 @@ export default function App() {
   const eventos = useMemo(() => (dados ? juntarEventos(dados, conectores) : []), [dados, conectores])
 
   useEffect(() => {
-    if (dados?.caderno.titulo) document.title = dados.caderno.titulo
-  }, [dados?.caderno.titulo])
+    if (dados?.fichario.titulo) document.title = dados.fichario.titulo
+  }, [dados?.fichario.titulo])
 
-  if (!dados) return <p className="carregando">abrindo o caderno…</p>
+  if (!dados) return <p className="carregando">abrindo o fichário…</p>
 
-  const ctx = { ...caderno, conectores, recarregarConectores, eventos }
-  const [a, id, n, leitura] = rota
-  const curso = a === 'curso' && dados.cursos.find(c => c.id === id)
+  const ctx = { ...fichario, conectores, recarregarConectores, eventos, ia }
+  const [a, id, aulaId] = rota
+  const m = a === 'm' && dados.materias.find(x => x.id === id)
   let pagina
   if (a === 'calendario')
     pagina = (
       <section className="pagina">
         <h1 className="titulo-mao">Calendário</h1>
-        <div className="folha"><Calendario eventos={eventos} cursos={dados.cursos} /></div>
+        <div className="folha"><Calendario eventos={eventos} materias={dados.materias} /></div>
       </section>
     )
   else if (a === 'ajustes') pagina = <Ajustes ctx={ctx} />
-  else if (curso && n && leitura && leituraDe(dados, id, n))
-    pagina = (
-      <section className="pagina">
-        <a className="voltar" href={`#/curso/${id}/${n}`}>← Módulo {n}</a>
-        <Leitura leitura={leituraDe(dados, id, n)} curso={curso} />
-      </section>
-    )
-  else if (curso && n) pagina = <Modulo ctx={ctx} curso={curso} n={+n} />
-  else if (curso) pagina = <Curso ctx={ctx} curso={curso} />
-  else if (a === 'curso') pagina = <p>Esse curso não existe (ou foi apagado). <a href="#/">Voltar pro início</a></p>
+  else if (m && aulaId) pagina = <Aula ctx={ctx} m={m} aulaId={aulaId} />
+  else if (m) pagina = <Materia ctx={ctx} m={m} />
+  else if (a === 'm') pagina = <p>Essa matéria não existe (ou foi apagada). <a href="#/">Voltar pro início</a></p>
   else pagina = <Inicio ctx={ctx} />
 
   return (
-    <div className="caderno">
-      <div className="margem" aria-hidden="true" />
-      <main className="conteudo">
+    <div className="fichario">
+      <div className="argolas" aria-hidden="true">
+        {[0, 1, 2, 3].map(i => <span key={i} className="argola" />)}
+      </div>
+      <main className="folha-fichario">
         <nav className="menu">
-          <a href="#/" className="menu-marca">📓 {dados.caderno.titulo || 'caderno'}</a>
+          <a href="#/" className="menu-marca">🗂️ {dados.fichario.titulo || 'fichário'}</a>
           <span className="menu-links">
-            {dados.cursos.map(c => (
-              <a key={c.id} href={`#/curso/${c.id}`} className={`menu-link cor-${c.cor}`}>{c.codigo || c.nome}</a>
-            ))}
             <a href="#/calendario" className="menu-link">calendário</a>
             <a href="#/ajustes" className="menu-link">ajustes</a>
           </span>
-          <Status status={caderno.status} />
+          <Status status={fichario.status} />
         </nav>
         {pagina}
       </main>
+      <nav className="abas" aria-label="matérias">
+        <a href="#/" className={`aba aba-inicio ${!a ? 'aba-ativa' : ''}`}>início</a>
+        {dados.materias.map(x => (
+          <a key={x.id} href={`#/m/${x.id}`} className={`aba cor-${x.cor} ${m?.id === x.id ? 'aba-ativa' : ''}`} title={x.nome}>
+            <span aria-hidden="true">{x.emoji}</span> {x.nome}
+          </a>
+        ))}
+      </nav>
     </div>
   )
 }
