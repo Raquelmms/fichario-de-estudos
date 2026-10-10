@@ -1,0 +1,65 @@
+{
+  "id": "git-do-zero",
+  "nome": "Git e GitHub do zero",
+  "codigo": "GIT",
+  "emoji": "🌱",
+  "cor": "verde",
+  "onde": "curso de exemplo (pode apagar)",
+  "link": "https://git-scm.com/book/pt-br/v2",
+  "modulos": [
+    {
+      "n": 1,
+      "titulo": "O que é controle de versão",
+      "inicio": "2026-10-05",
+      "fim": "2026-10-11",
+      "resumo": [
+        "Controle de versão guarda a **história** do projeto: dá pra voltar no tempo e ver quem mudou o quê.",
+        "O Git é **distribuído**: cada cópia do repositório tem a história inteira.",
+        "Os três lugares do Git: **working directory**, **staging area** e **repositório**."
+      ],
+      "chaves": ["commit", "repositório", "staging"],
+      "anotacoes": "Minha analogia: o `git add` é separar as fotos que vão pro álbum, e o `git commit` é colar no álbum com uma legenda.\n\n- [x] instalar o Git\n- [x] configurar nome e e-mail\n- [ ] ler o capítulo 1 do Pro Git",
+      "feito": false
+    },
+    {
+      "n": 2,
+      "titulo": "Comandos do dia a dia",
+      "inicio": "2026-10-12",
+      "fim": "2026-10-18",
+      "resumo": [
+        "`git status` diz em que pé as coisas estão. Na dúvida, rode ele.",
+        "`git add` → `git commit` → `git push`: o ciclo básico.",
+        "`git log --oneline` mostra a história resumida."
+      ],
+      "chaves": ["status", "add", "commit", "push"],
+      "anotacoes": "",
+      "feito": false
+    },
+    {
+      "n": 3,
+      "titulo": "Branches e merge",
+      "inicio": "2026-10-19",
+      "fim": "2026-10-25",
+      "resumo": [],
+      "chaves": [],
+      "anotacoes": "",
+      "feito": false
+    },
+    {
+      "n": 4,
+      "titulo": "GitHub e pull requests",
+      "inicio": "2026-10-26",
+      "fim": "2026-11-01",
+      "resumo": [],
+      "chaves": [],
+      "anotacoes": "",
+      "feito": false
+    }
+  ],
+  "prazos": [
+    { "id": "p1", "titulo": "Exercício: primeiro repositório", "tipo": "tarefa", "data": "2026-10-11T23:59", "modulo": 1, "peso": 20, "nota": 90, "feito": true },
+    { "id": "p2", "titulo": "Quiz dos comandos", "tipo": "prova", "data": "2026-10-18T23:59", "modulo": 2, "peso": 20, "feito": false },
+    { "id": "p3", "titulo": "Resolver um conflito de merge", "tipo": "tarefa", "data": "2026-10-25T23:59", "modulo": 3, "peso": 25, "feito": false },
+    { "id": "p4", "titulo": "Projeto final: PR num repo de amiga", "tipo": "projeto", "data": "2026-11-01T23:59", "modulo": 4, "peso": 35, "feito": false }
+  ]
+}
