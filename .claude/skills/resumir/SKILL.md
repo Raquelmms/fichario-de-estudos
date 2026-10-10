@@ -10,7 +10,7 @@ Escreve o resumo de uma aula direto no arquivo da matéria, no formato do `CLAUD
 
 ## 1. Achar a aula
 
-- `<matéria>`: o id ou o nome (aproximado) de um arquivo em `dados/materias/`.
+- `<matéria>`: o id ou o nome (aproximado) de um arquivo em `dados/materias/` ou `dados/arquivo/*/`.
 - `<aula>`: o id, o número (na ordem das datas) ou o título aproximado de uma aula dessa matéria.
   Se não existir, crie uma aula nova (id de 6 letras/números aleatórios, `data` de hoje, título curto tirado do material).
 - Se faltar a matéria e não der pra deduzir pelo assunto, pergunte.

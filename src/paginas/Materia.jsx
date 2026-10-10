@@ -5,10 +5,12 @@ import Campo from '../componentes/Campo.jsx'
 import Capa from '../componentes/Capa.jsx'
 import { Cartela } from '../componentes/Adesivos.jsx'
 import SeletorEmoji from '../componentes/SeletorEmoji.jsx'
+import EscolherGrupo from '../componentes/EscolherGrupo.jsx'
 
 export default function Materia({ ctx, m }) {
-  const { mudarMateria, excluirMateria } = ctx
+  const { dados, mudarMateria, excluirMateria, arquivarMateria, desarquivarMateria } = ctx
   const [personalizando, setPersonalizando] = useState(false)
+  const [arquivando, setArquivando] = useState(false)
   const mudar = fn => mudarMateria(m.id, fn)
   const mudarCapa = fn => mudar(x => { x.capa ||= { padrao: 'liso', adesivos: [] }; fn(x.capa) })
   const md = media(m)
@@ -35,6 +37,32 @@ export default function Materia({ ctx, m }) {
 
   return (
     <section className="pagina">
+      {m.arquivada && (
+        <div className="faixa-arquivada">
+          <span>📦 Arquivada em <b>{m.arquivada.grupo}</b></span>
+          {EDITAVEL && (
+            <span className="linha-acoes">
+              <button className="link" onClick={() => setArquivando(true)}>mudar de grupo</button>
+              <button className="btn-claro" onClick={() => desarquivarMateria(m.id)}>desarquivar</button>
+            </span>
+          )}
+          <a href="#/arquivo">ver o arquivo</a>
+        </div>
+      )}
+      {arquivando && (
+        <div className="folha">
+          <EscolherGrupo
+            materias={dados.materias}
+            inicial={m.arquivada?.grupo}
+            rotulo={m.arquivada ? 'mudar' : '📦 arquivar'}
+            onCancelar={() => setArquivando(false)}
+            onEscolher={grupo => {
+              arquivarMateria(m.id, grupo)
+              setArquivando(false)
+            }}
+          />
+        </div>
+      )}
       <div className="materia-abertura">
         <div className="materia-capa">
           <Capa m={m} grande editavel={EDITAVEL && personalizando} mudarCapa={mudarCapa} />
@@ -152,6 +180,12 @@ export default function Materia({ ctx, m }) {
       {EDITAVEL && (
         <p className="rodape-nota">
           Tudo desta matéria fica em <code>dados/{m._arquivo || `materias/${m.id}.json`}</code>.{' '}
+          {!m.arquivada && (
+            <>
+              <button className="link" onClick={() => { setArquivando(true); window.scrollTo(0, 0) }}>📦 arquivar matéria</button>
+              {' · '}
+            </>
+          )}
           <button className="btn-perigo" onClick={excluir}>apagar matéria</button>
         </p>
       )}

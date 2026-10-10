@@ -13,7 +13,7 @@ function dadosEmbutidos() {
   for (const [arq, json] of Object.entries(EMBUTIDO)) {
     const rel = arq.replace(/^.*\/dados\//, '')
     if (rel === 'fichario.json') d.fichario = json
-    else if (rel.startsWith('materias/')) d.materias.push({ ...json, _arquivo: rel })
+    else if (rel.startsWith('materias/') || rel.startsWith('arquivo/')) d.materias.push({ ...json, _arquivo: rel })
   }
   return d
 }
@@ -58,8 +58,10 @@ export function useFichario() {
         })
         if (!r.ok) throw new Error((await r.json()).erro)
         setStatus('salvo')
+        return true
       } catch (e) {
         setStatus({ erro: `não salvou ${rel}: ${e.message}` })
+        return false
       }
     })
     filas.current[rel] = agora
@@ -95,6 +97,31 @@ export function useFichario() {
     gravar(materia._arquivo || `materias/${id}.json`, null)
   }
 
+  // Muda a matéria de arquivo (ativa ↔ arquivo/<grupo>/): grava no lugar novo e só então apaga o antigo.
+  const moverMateria = async (id, fn) => {
+    const atual = ref.current.materias.find(m => m.id === id)
+    const { _arquivo: antigo, ...copia } = structuredClone(atual)
+    fn(copia)
+    const novo = copia.arquivada ? `arquivo/${slug(copia.arquivada.grupo)}/${id}.json` : `materias/${id}.json`
+    trocar({ ...ref.current, materias: ref.current.materias.map(m => (m.id === id ? { ...copia, _arquivo: novo } : m)) })
+    if (novo === antigo) return gravar(novo, copia)
+    if (await gravar(novo, copia)) await gravar(antigo, null)
+  }
+
+  const arquivarMateria = (id, grupo) =>
+    moverMateria(id, m => {
+      m.arquivada = { grupo: grupo.trim(), em: m.arquivada?.em || new Date().toISOString().slice(0, 10) }
+    })
+
+  const desarquivarMateria = id =>
+    moverMateria(id, m => {
+      delete m.arquivada
+    })
+
+  const renomearGrupo = async (antigo, novo) => {
+    for (const m of ref.current.materias.filter(x => x.arquivada?.grupo === antigo)) await arquivarMateria(m.id, novo)
+  }
+
   const mudarFichario = fn => {
     const copia = structuredClone(ref.current.fichario)
     const novo = fn(copia) || copia
@@ -102,7 +129,7 @@ export function useFichario() {
     gravar('fichario.json', novo)
   }
 
-  return { dados, status, recarregar, salvarMateria, mudarMateria, mudarAula, excluirMateria, mudarFichario }
+  return { dados, status, recarregar, salvarMateria, mudarMateria, mudarAula, excluirMateria, mudarFichario, arquivarMateria, desarquivarMateria, renomearGrupo }
 }
 
 // Itens que vêm dos conectores (agenda, Linear…). Só existem com npm run dev.
@@ -180,6 +207,20 @@ export const novaAula = n => ({
   teste: [],
 })
 
+export const ativas = materias => materias.filter(m => !m.arquivada)
+
+// Grupos do arquivo, do mais novo pro mais antigo: [{ grupo, materias }]
+export function gruposDoArquivo(materias) {
+  const g = {}
+  for (const m of materias) if (m.arquivada) (g[m.arquivada.grupo] ||= []).push(m)
+  return Object.entries(g)
+    .map(([grupo, ms]) => ({ grupo, materias: ms, em: ms.map(m => m.arquivada.em || '').sort().at(-1) }))
+    .sort((a, b) => b.em.localeCompare(a.em) || b.grupo.localeCompare(a.grupo))
+}
+
+// Sugestão de grupo pra quem não sabe o que escolher: "2026 · 2º semestre"
+export const grupoSugerido = (d = new Date()) => `${d.getFullYear()} · ${d.getMonth() < 6 ? '1º' : '2º'} semestre`
+
 // Média ponderada dos prazos que já têm nota.
 export function media(materia) {
   const comPeso = (materia.prazos || []).filter(p => p.peso)
@@ -196,7 +237,7 @@ export function media(materia) {
 // Tudo que tem data (prazos, aulas e conectores) numa lista só.
 export function eventos(dados, conectores = []) {
   const lista = []
-  for (const m of dados.materias) {
+  for (const m of ativas(dados.materias)) {
     for (const p of m.prazos || []) {
       const quando = lerData(p.data)
       if (!quando) continue

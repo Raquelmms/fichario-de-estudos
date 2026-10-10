@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useFichario, useConectores, useIA, eventos as juntarEventos, EDITAVEL } from './dados.js'
+import { useFichario, useConectores, useIA, eventos as juntarEventos, ativas, EDITAVEL } from './dados.js'
 import Inicio from './paginas/Inicio.jsx'
 import Materia from './paginas/Materia.jsx'
 import Aula from './paginas/Aula.jsx'
 import Ajustes from './paginas/Ajustes.jsx'
+import Arquivo from './paginas/Arquivo.jsx'
 import Calendario from './componentes/Calendario.jsx'
 
-// Rotas: #/ · #/calendario · #/ajustes · #/m/<matéria> · #/m/<matéria>/<aula>
+// Rotas: #/ · #/calendario · #/ajustes · #/arquivo · #/m/<matéria> · #/m/<matéria>/<aula>
 const lerRota = () => window.location.hash.replace(/^#\/?/, '').split('/').filter(Boolean)
 
 export default function App() {
@@ -45,6 +46,7 @@ export default function App() {
       </section>
     )
   else if (a === 'ajustes') pagina = <Ajustes ctx={ctx} />
+  else if (a === 'arquivo') pagina = <Arquivo ctx={ctx} />
   else if (m && aulaId) pagina = <Aula ctx={ctx} m={m} aulaId={aulaId} />
   else if (m) pagina = <Materia ctx={ctx} m={m} />
   else if (a === 'm') pagina = <p>Essa matéria não existe (ou foi apagada). <a href="#/">Voltar pro início</a></p>
@@ -72,11 +74,14 @@ export default function App() {
       </main>
       <nav className="abas" aria-label="matérias">
         <a href="#/" className={`aba aba-inicio ${!a ? 'aba-ativa' : ''}`}>início</a>
-        {dados.materias.map(x => (
+        {ativas(dados.materias).map(x => (
           <a key={x.id} href={`#/m/${x.id}`} className={`aba cor-${x.cor} ${m?.id === x.id ? 'aba-ativa' : ''}`} title={x.nome}>
             <span aria-hidden="true">{x.emoji || '📒'}</span> {x.nome}
           </a>
         ))}
+        {dados.materias.some(x => x.arquivada) && (
+          <a href="#/arquivo" className={`aba aba-arquivo ${a === 'arquivo' || m?.arquivada ? 'aba-ativa' : ''}`}>📦 arquivo</a>
+        )}
       </nav>
     </div>
   )

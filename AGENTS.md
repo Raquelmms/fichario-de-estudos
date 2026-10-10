@@ -18,9 +18,12 @@ No Claude Code eles também viram os comandos `/resumir` e `/nova-materia`.
 { "titulo": "Meu fichário", "subtitulo": "frase curta" }
 ```
 
-## dados/materias/<id>.json
+## dados/materias/<id>.json (e dados/arquivo/<grupo>/<id>.json)
 
-O nome do arquivo é o `id` (minúsculas, hífens, sem acento).
+O nome do arquivo é o `id` (minúsculas, hífens, sem acento). Matérias **arquivadas** ficam em
+`dados/arquivo/<grupo-em-slug>/<id>.json` e têm `"arquivada": { "grupo": "2026 · 1º semestre", "em": "2026-07-01" }`;
+saem das abas, do início e do calendário, mas abrem normalmente. Ao procurar uma matéria, olhe as duas pastas.
+Pra arquivar ou desarquivar, mova o arquivo e ajuste o campo `arquivada` (o app faz isso sozinho).
 
 ```json
 {

@@ -36,11 +36,18 @@ const responder = (res, status, obj) => {
 const lerJson = arq => JSON.parse(fs.readFileSync(arq, 'utf8'))
 const listar = dir => (fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort() : [])
 
+// Matérias ativas ficam em dados/materias/; arquivadas em dados/arquivo/<grupo>/.
 export function lerTudo(raiz) {
   const dados = path.join(raiz, 'dados')
+  const ler = rel => ({ ...lerJson(path.join(dados, rel)), _arquivo: rel })
+  const pastaArquivo = path.join(dados, 'arquivo')
+  const grupos = fs.existsSync(pastaArquivo) ? fs.readdirSync(pastaArquivo, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name) : []
   return {
     fichario: lerJson(path.join(dados, 'fichario.json')),
-    materias: listar(path.join(dados, 'materias')).map(f => ({ ...lerJson(path.join(dados, 'materias', f)), _arquivo: `materias/${f}` })),
+    materias: [
+      ...listar(path.join(dados, 'materias')).map(f => ler(`materias/${f}`)),
+      ...grupos.flatMap(g => listar(path.join(pastaArquivo, g)).map(f => ler(`arquivo/${g}/${f}`))),
+    ],
   }
 }
 
@@ -106,6 +113,9 @@ export default function pluginCaderno({ raiz, env }) {
           if (req.method === 'DELETE') {
             escritasNossas.set(abs, null)
             fs.rmSync(abs, { force: true })
+            // pasta de grupo do arquivo que ficou vazia some junto
+            const pasta = path.dirname(abs)
+            if (path.dirname(pasta) === path.join(pastaDados, 'arquivo') && !fs.readdirSync(pasta).length) fs.rmdirSync(pasta)
             return responder(res, 200, { ok: true })
           }
           responder(res, 405, { erro: 'método não suportado' })

@@ -12,6 +12,7 @@ Serve pra faculdade, escola, curso online, certificação, idioma, concurso… q
 - **Post-its e adesivos** que você cola e arrasta pela página: a turminha (personagens fofos originais), emojis, selos tipo "cai na prova" e fitas washi
 - **✨ Resumir material**: cola o texto da aula e ele vira uma página resumida, já grifada, com post-its e teste rápido
 - **Prazos** com peso e nota (calcula sua média), próximo prazo em destaque e calendário
+- **📦 Arquivo**: matéria que acabou vai pra uma estante, organizada por grupo (semestre, termo, ano… você escolhe), com todo o material
 - **Conectores opcionais**: puxa eventos da sua agenda (Google, Outlook, Apple) e do Linear
 - Tudo salvo em **arquivos JSON** na pasta `dados/`. Sem conta, sem banco, sem mensalidade
 
@@ -64,6 +65,7 @@ arquivos de `dados/`:
 dados/
   fichario.json            nome do fichário
   materias/<matéria>.json  uma matéria por arquivo: capa, aulas, post-its, adesivos e prazos
+  arquivo/<grupo>/…        matérias arquivadas, numa pasta por grupo (semestre, termo…)
 ```
 
 O canto de cima mostra **✓ salvo** a cada mudança. Pra ter backup e histórico, use o git:

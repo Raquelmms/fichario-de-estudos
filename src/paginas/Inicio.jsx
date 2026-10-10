@@ -1,4 +1,4 @@
-import { EDITAVEL, slug, novaMateria } from '../dados.js'
+import { EDITAVEL, slug, novaMateria, ativas } from '../dados.js'
 import { diaMes, diaSemana, hora, falta, quandoCurto, chaveDia } from '../datas.js'
 import Campo from '../componentes/Campo.jsx'
 import Capa from '../componentes/Capa.jsx'
@@ -25,7 +25,7 @@ export default function Inicio({ ctx }) {
     const nome = prompt('Nome da matéria:')
     if (!nome?.trim()) return
     const id = slug(nome, dados.materias.map(m => m.id))
-    salvarMateria(novaMateria(nome.trim(), id, dados.materias.length))
+    salvarMateria(novaMateria(nome.trim(), id, ativas(dados.materias).length))
     window.location.hash = `/m/${id}`
   }
 
@@ -67,14 +67,17 @@ export default function Inicio({ ctx }) {
 
       <h2 className="sub-mao">Minhas matérias</h2>
       <div className="capas">
-        {dados.materias.map(m => (
+        {ativas(dados.materias).map(m => (
           <a key={m.id} href={`#/m/${m.id}`} className="capa-link" aria-label={`abrir ${m.nome}`}>
             <Capa m={m} />
           </a>
         ))}
         {EDITAVEL && <button className="capa-nova" onClick={criar}>+ nova matéria</button>}
       </div>
-      {!dados.materias.length && !EDITAVEL && <p>Nenhuma matéria ainda.</p>}
+      {!ativas(dados.materias).length && !EDITAVEL && <p>Nenhuma matéria ainda.</p>}
+      {dados.materias.some(m => m.arquivada) && (
+        <p className="dica"><a href="#/arquivo">📦 ver o arquivo ({dados.materias.filter(m => m.arquivada).length} matérias guardadas)</a></p>
+      )}
 
       <h2 className="sub-mao">Próximos 14 dias</h2>
       <div className="folha">
@@ -111,7 +114,7 @@ export default function Inicio({ ctx }) {
 
       <h2 className="sub-mao">Calendário</h2>
       <div className="folha">
-        <Calendario eventos={eventos} materias={dados.materias} compacto />
+        <Calendario eventos={eventos} materias={ativas(dados.materias)} compacto />
       </div>
     </section>
   )
