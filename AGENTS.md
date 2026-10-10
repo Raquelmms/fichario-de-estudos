@@ -96,11 +96,13 @@ Personagens (a turminha, em `src/componentes/Personagens.jsx`): nina, lulu, nyx,
 
 `s` é a escala (0.5 a 3). Selos e fitas disponíveis estão em `src/componentes/Adesivos.jsx`.
 
-## Botão de resumo dentro do app (opcional)
+## Botão "✨ resumir" do app
 
-O jeito principal de resumir é pedir pro agente (acima). Existe também um botão que resume dentro do app:
-`servidor/resumir.mjs` chama a API do Claude (`claude-opus-5-5`, ou `RESUMO_MODELO`) com saída estruturada
-`{ titulo, html, postits, teste }`. Só aparece com `ANTHROPIC_API_KEY` no `.env.local` (pago por uso).
+`servidor/agentes.mjs` chama o agente instalado (`claude -p`, `codex exec`, `copilot -p`, `cursor-agent -p`) numa pasta
+temporária vazia, sem ferramentas, com as instruções e o formato de `servidor/resumir.mjs`, e valida o JSON
+`{ titulo, html, postits, teste }` antes de gravar na aula. Se tiver `ANTHROPIC_API_KEY`, a API do Claude também
+entra como opção. Pra mudar o jeito de resumir, edite `INSTRUCOES` em `servidor/resumir.mjs` (vale pros dois caminhos)
+e mantenha `.claude/skills/resumir/SKILL.md` coerente.
 
 ## Conectores
 

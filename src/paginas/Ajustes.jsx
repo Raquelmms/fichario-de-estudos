@@ -30,14 +30,19 @@ export default function Ajustes({ ctx }) {
         <div className="folha">
           <h2 className="sub-mao">Resumir com IA</h2>
           <p>
-            Em cada aula, <b>✨ resumir material</b> guarda o texto que você colar. Depois é só pedir pro seu agente
-            (Claude Code, Codex, Cursor…) aberto nesta pasta: ele segue as instruções do <code>AGENTS.md</code> e escreve a
-            página grifada, com post-its e teste rápido. <b>Não precisa de chave.</b>
+            O <b>✨ resumir</b> de cada aula usa o agente que você já tem instalado, com a sua assinatura. <b>Não precisa de chave.</b>
+          </p>
+          <p>
+            Encontrei:{' '}
+            {ia.agentes?.length ? ia.agentes.map(a => <span key={a.id} className="selo selo-ok" style={{ marginRight: 6 }}>{a.nome}</span>) : <span className="selo selo-off">nenhum agente</span>}
           </p>
           <p className="dica">
-            Opcional: com <code>ANTHROPIC_API_KEY</code> no <code>.env.local</code> aparece também um botão que resume dentro do
-            próprio app, usando a API do Claude (paga por uso).{' '}
-            {ia.ativo ? <span className="selo selo-ok">ligado · {ia.modelo}</span> : <span className="selo selo-off">desligado</span>}
+            Suportados: Claude Code (<code>claude</code>), Codex (<code>codex</code>), GitHub Copilot CLI (<code>copilot</code>) e Cursor CLI (<code>cursor-agent</code>).
+            Pra deixar um como padrão, coloque <code>AGENTE=claude</code> (ou codex, copilot, cursor) no <code>.env.local</code>.
+          </p>
+          <p className="dica">
+            Opcional: com <code>ANTHROPIC_API_KEY</code> no <code>.env.local</code>, a API do Claude também aparece na lista (paga por uso).{' '}
+            {ia.api?.ativo ? <span className="selo selo-ok">API ligada · {ia.api.modelo}</span> : <span className="selo selo-off">API desligada</span>}
           </p>
         </div>
       )}

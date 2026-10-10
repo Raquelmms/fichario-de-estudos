@@ -123,9 +123,9 @@ export function useConectores() {
   return { conectores, recarregar: () => carregar(true) }
 }
 
-// O resumo com IA está ligado? (precisa de ANTHROPIC_API_KEY no .env.local)
+// Com quem dá pra resumir: agentes instalados (Claude Code, Codex…) e a API do Claude, se tiver chave.
 export function useIA() {
-  const [ia, setIa] = useState({ ativo: false })
+  const [ia, setIa] = useState({ agentes: [], api: { ativo: false } })
   useEffect(() => {
     if (!EDITAVEL) return
     fetch('/api/ia')

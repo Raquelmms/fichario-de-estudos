@@ -105,6 +105,23 @@ function PainelResumo({ m, a, mudar, ia, fechar }) {
   const [estado, setEstado] = useState(null) // null · 'resumindo' · { erro }
   const [copiado, setCopiado] = useState(false)
 
+  // Com quem resumir: os agentes instalados no computador e, se tiver chave, a API do Claude.
+  const opcoes = [...(ia.agentes || []), ...(ia.api?.ativo ? [{ id: 'api', nome: `API do Claude (${ia.api.modelo})` }] : [])]
+  const [agente, setAgente] = useState(() => {
+    let salvo = null
+    try {
+      salvo = localStorage.getItem('fichario:agente')
+    } catch {}
+    return [salvo, ia.padrao].find(id => opcoes.some(o => o.id === id)) || opcoes[0]?.id
+  })
+  const escolherAgente = id => {
+    setAgente(id)
+    try {
+      localStorage.setItem('fichario:agente', id)
+    } catch {}
+  }
+  const nomeAgente = opcoes.find(o => o.id === agente)?.nome
+
   const copiarPedido = async () => {
     guardar()
     const pedido = `Resuma a aula "${a.titulo}" da matéria "${m.nome}" do meu fichário (arquivo dados/${m._arquivo || `materias/${m.id}.json`}), seguindo as instruções de resumo do AGENTS.md. O material está no campo "material" dessa aula.`
@@ -126,7 +143,7 @@ function PainelResumo({ m, a, mudar, ia, fechar }) {
       const r = await fetch('/api/resumir', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ material, materia: m.nome, aula: a.titulo }),
+        body: JSON.stringify({ material, materia: m.nome, aula: a.titulo, agente }),
       })
       const j = await r.json()
       if (!r.ok) throw new Error(j.erro)
@@ -161,22 +178,35 @@ function PainelResumo({ m, a, mudar, ia, fechar }) {
         placeholder="Cole o material aqui…"
         aria-label="material da aula"
       />
-      <div className="sem-ia">
-        <p><b>Peça pro seu agente</b> (Claude Code, Codex, Cursor…) aberto na pasta do fichário. Não precisa de chave nem de configurar nada.</p>
-        <div className="linha-acoes">
-          <button className="btn" onClick={copiarPedido} disabled={!material.trim()}>📋 copiar pedido pro agente</button>
-          {copiado && <span className="ok-mao">copiado!</span>}
+      {opcoes.length > 0 ? (
+        <div className="resumir-com">
+          <div className="linha-acoes">
+            <button className="btn" onClick={resumir} disabled={!material.trim() || estado === 'resumindo'}>
+              {estado === 'resumindo' ? `resumindo com ${nomeAgente}… (uns segundos)` : '✨ resumir'}
+            </button>
+            <label className="dica">
+              com{' '}
+              <select className="campo" value={agente} onChange={e => escolherAgente(e.target.value)} disabled={estado === 'resumindo'}>
+                {opcoes.map(o => <option key={o.id} value={o.id}>{o.nome}</option>)}
+              </select>
+            </label>
+          </div>
+          <p className="dica">
+            Usa o agente que você já tem instalado, com a sua assinatura. Sem chave de API. Ele só lê o material e devolve o resumo,
+            não mexe em nenhum arquivo.
+          </p>
         </div>
-        <p className="dica">É só colar no agente. No Claude Code também dá pra usar <code>/resumir {m.id} {a.titulo}</code>.</p>
-      </div>
-      {ia.ativo && (
-        <div className="linha-acoes">
-          <button className="btn-claro" onClick={resumir} disabled={!material.trim() || estado === 'resumindo'}>
-            {estado === 'resumindo' ? 'resumindo… (pode levar um minutinho)' : '✨ resumir aqui mesmo'}
-          </button>
-          <span className="dica">Usa a API do Claude ({ia.modelo}), paga por uso.</span>
+      ) : (
+        <div className="sem-ia">
+          <p>Não achei nenhum agente instalado (Claude Code, Codex, Copilot CLI ou Cursor CLI).</p>
+          <p className="dica">Instale um deles e reinicie o <code>npm run dev</code>, ou copie o pedido abaixo e cole no agente que você usar.</p>
         </div>
       )}
+      <p className="dica">
+        Prefere conversar com o agente?{' '}
+        <button className="link" onClick={copiarPedido} disabled={!material.trim()}>📋 copiar pedido</button>
+        {copiado && <span className="ok-mao"> copiado!</span>}
+      </p>
       <p className="dica">Ou escreva você mesma: a página é toda editável. 😉</p>
       {estado?.erro && <p className="erro">⚠ {estado.erro}</p>}
     </div>

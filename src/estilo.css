@@ -502,3 +502,7 @@ select.campo { width: auto; min-width: 7.5em; }
 .cor-livre input { width: 24px; height: 24px; border: 0; padding: 0; background: none; cursor: pointer; border-radius: 50%; }
 .cor-livre input::-webkit-color-swatch-wrapper { padding: 0; }
 .cor-livre input::-webkit-color-swatch { border: 0; border-radius: 50%; }
+.resumir-com { background: color-mix(in srgb, var(--roxo) 10%, var(--papel-folha)); border-radius: 8px; padding: 10px 16px; }
+.resumir-com select.campo { min-width: 10em; font-weight: 700; color: var(--tinta); }
+.link { background: none; border: 0; padding: 0; color: var(--azul); cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; font-size: inherit; }
+.link:disabled { color: var(--tinta-suave); cursor: default; }

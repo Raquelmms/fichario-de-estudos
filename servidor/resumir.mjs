@@ -1,5 +1,5 @@
-// Resume o material de uma aula com a API do Claude.
-// Só roda no servidor local, e só se ANTHROPIC_API_KEY estiver no .env.local.
+// Instruções e formato do resumo de uma aula, usados pelos agentes locais (agentes.mjs)
+// e pelo botão opcional que chama a API do Claude direto (precisa de ANTHROPIC_API_KEY).
 
 import Anthropic from '@anthropic-ai/sdk'
 import { z } from 'zod'
@@ -8,7 +8,7 @@ import { GRIFOS, CORES_POSTIT } from '../src/grifos.js'
 
 export const MODELO_PADRAO = 'claude-opus-5-5'
 
-const Resumo = z.object({
+export const Resumo = z.object({
   titulo: z.string().describe('título curto da aula, em português'),
   html: z.string().describe('o resumo em HTML, no formato pedido'),
   postits: z.array(z.object({ cor: z.enum(CORES_POSTIT), texto: z.string() })),
@@ -17,7 +17,7 @@ const Resumo = z.object({
 
 const legenda = GRIFOS.map(g => `- <mark data-color="${g.cor}"> = ${g.nome}`).join('\n')
 
-const INSTRUCOES = `Você ajuda estudantes a transformar o material de uma aula (texto de livro, slides, transcrição, anotações soltas) numa página de caderno bem resumida, em português do Brasil.
+export const INSTRUCOES = `Você ajuda estudantes a transformar o material de uma aula (texto de livro, slides, transcrição, anotações soltas) numa página de caderno bem resumida, em português do Brasil.
 
 Escreva com as suas palavras, claro e direto, como uma amiga que explica bem. Não invente nada que não esteja no material. Citação literal só curta, entre aspas.
 
@@ -30,9 +30,30 @@ Grife pouco: só o que realmente importa, no máximo um ou dois grifos por pará
 "postits": de 2 a 4 lembretes curtos (até 25 palavras cada) com macetes, analogias ou "cuidado com isso". A primeira linha pode ser um título curto.
 "teste": de 4 a 6 perguntas de revisão com respostas de uma ou duas frases.`
 
+// O mesmo formato em JSON Schema (pra --json-schema do Claude Code e --output-schema do Codex).
+export const SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['titulo', 'html', 'postits', 'teste'],
+  properties: {
+    titulo: { type: 'string' },
+    html: { type: 'string' },
+    postits: {
+      type: 'array',
+      items: { type: 'object', additionalProperties: false, required: ['cor', 'texto'], properties: { cor: { type: 'string', enum: CORES_POSTIT }, texto: { type: 'string' } } },
+    },
+    teste: {
+      type: 'array',
+      items: { type: 'object', additionalProperties: false, required: ['p', 'r'], properties: { p: { type: 'string' }, r: { type: 'string' } } },
+    },
+  },
+}
+
+export const pedido = ({ material, materia, aula }) =>
+  `${[materia && `Matéria: ${materia}`, aula && `Aula: ${aula}`].filter(Boolean).join('\n')}\n\n<material>\n${material}\n</material>`
+
 export async function resumir({ material, materia, aula, env }) {
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
-  const contexto = [materia && `Matéria: ${materia}`, aula && `Aula: ${aula}`].filter(Boolean).join('\n')
 
   const resposta = await client.beta.messages.parse({
     model: env.RESUMO_MODELO || MODELO_PADRAO,
@@ -41,7 +62,7 @@ export async function resumir({ material, materia, aula, env }) {
     fallbacks: 'default',
     output_config: { effort: 'medium', format: betaZodOutputFormat(Resumo) },
     system: INSTRUCOES,
-    messages: [{ role: 'user', content: `${contexto}\n\n<material>\n${material}\n</material>` }],
+    messages: [{ role: 'user', content: pedido({ material, materia, aula }) }],
   })
 
   if (resposta.stop_reason === 'refusal') throw new Error('o modelo recusou resumir esse material')

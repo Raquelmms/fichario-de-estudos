@@ -32,19 +32,28 @@ Precisa do [Node.js](https://nodejs.org) 20 ou mais novo.
 
 ## Resumir material
 
-Em cada aula, o botão **✨ resumir material** abre uma caixa pra colar o texto (livro, slides, transcrição,
-anotações soltas). O material fica guardado na aula. Depois:
+Em cada aula, **✨ resumir material** abre uma caixa pra colar o texto (livro, slides, transcrição, anotações
+soltas). Escolha o agente e clique em **✨ resumir**: em uns segundos a página aparece grifada com a legenda de
+cores, com post-its e teste rápido.
 
-1. Clique em **📋 copiar pedido pro agente**.
-2. Cole no seu agente (Claude Code, Codex, Cursor…) aberto na pasta do fichário.
+O fichário usa o **agente que você já tem instalado**, com a sua assinatura, **sem chave de API**:
 
-Ele segue as instruções do [`AGENTS.md`](AGENTS.md) e escreve a página grifada com a legenda de cores, post-its
-e teste rápido. **Não precisa de chave de API.** No Claude Code também dá pra usar `/resumir <matéria> <aula>`.
+| agente | comando |
+|---|---|
+| Claude Code | `claude` |
+| Codex | `codex` |
+| GitHub Copilot CLI | `copilot` |
+| Cursor CLI | `cursor-agent` |
 
-Opcional: com uma `ANTHROPIC_API_KEY` no `.env.local`, aparece um botão que resume dentro do próprio app
-(usa a API do Claude, paga por uso).
+Ele roda o agente no modo automático, numa pasta temporária vazia e sem ferramentas: o agente só lê o material
+e devolve o resumo, e quem grava na aula é o fichário. Assim gasta pouco (o Claude Code, por exemplo, usa ~1 mil
+tokens de contexto em vez dos ~100 mil de uma sessão normal) e não mexe em nenhum arquivo.
 
-Ou escreva você mesma: a página é toda editável.
+Outras formas:
+- **Conversando com o agente**: clique em **📋 copiar pedido** e cole no agente aberto na pasta do fichário. Ele segue o
+  [`AGENTS.md`](AGENTS.md). No Claude Code também tem o comando `/resumir <matéria> <aula>`.
+- **API do Claude** (opcional, paga por uso): com `ANTHROPIC_API_KEY` no `.env.local`, ela aparece na lista de agentes.
+- Ou escreva você mesma: a página é toda editável.
 
 ## Como ele salva
 
@@ -102,7 +111,7 @@ Se suas anotações forem pessoais, use só o modo local.
 src/
   paginas/        Início, Matéria, Aula, Ajustes
   componentes/    Editor (texto + marca-texto), CamadaLivre (post-its e adesivos), Capa, Adesivos, Calendário
-servidor/         servidor local: lê e grava dados/, roda conectores e o resumo com IA
+servidor/         servidor local: lê e grava dados/, roda conectores e chama o agente pra resumir
 conectores/       agenda.mjs, linear.mjs, _modelo.mjs
 dados/            seus dados (JSON)
 .claude/skills/   instruções de resumir e de criar matéria (qualquer agente lê pelo AGENTS.md)

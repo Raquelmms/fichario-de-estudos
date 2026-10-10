@@ -3,8 +3,8 @@
 //   PUT    /api/dados/<arquivo>   → grava um JSON em dados/
 //   DELETE /api/dados/<arquivo>   → apaga um JSON de dados/
 //   GET    /api/conectores        → itens dos conectores ligados (agenda, Linear…)
-//   GET    /api/ia                → se o resumo com IA está ligado
-//   POST   /api/resumir           → resume o material colado de uma aula (precisa de ANTHROPIC_API_KEY)
+//   GET    /api/ia                → agentes instalados (Claude Code, Codex…) e se a API do Claude está ligada
+//   POST   /api/resumir           → resume o material colado de uma aula com o agente escolhido
 // Quando alguém mexe num arquivo de dados/ por fora (editor, Claude Code),
 // a página recebe um aviso e recarrega os dados sozinha.
 
@@ -12,6 +12,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { resumir, MODELO_PADRAO } from './resumir.mjs'
+import { agentesInstalados, resumirComAgente } from './agentes.mjs'
 
 const lerCorpo = req =>
   new Promise((ok, erro) => {
@@ -113,17 +114,26 @@ export default function pluginCaderno({ raiz, env }) {
         }
       })
 
+      const agentes = agentesInstalados()
+
       server.middlewares.use('/api/ia', (req, res) =>
-        responder(res, 200, { ativo: !!env.ANTHROPIC_API_KEY, modelo: env.RESUMO_MODELO || MODELO_PADRAO }),
+        responder(res, 200, {
+          agentes: agentes.filter(a => a.instalado),
+          padrao: env.AGENTE || null,
+          api: { ativo: !!env.ANTHROPIC_API_KEY, modelo: env.RESUMO_MODELO || MODELO_PADRAO },
+        }),
       )
 
       server.middlewares.use('/api/resumir', async (req, res) => {
         if (req.method !== 'POST') return responder(res, 405, { erro: 'use POST' })
-        if (!env.ANTHROPIC_API_KEY) return responder(res, 400, { erro: 'sem ANTHROPIC_API_KEY no .env.local' })
         try {
-          const { material, materia, aula } = await lerCorpo(req)
+          const { material, materia, aula, agente } = await lerCorpo(req)
           if (!material?.trim()) return responder(res, 400, { erro: 'cole o material primeiro' })
-          responder(res, 200, await resumir({ material, materia, aula, env }))
+          if (agente === 'api') {
+            if (!env.ANTHROPIC_API_KEY) return responder(res, 400, { erro: 'sem ANTHROPIC_API_KEY no .env.local' })
+            return responder(res, 200, await resumir({ material, materia, aula, env }))
+          }
+          responder(res, 200, await resumirComAgente(agente, { material, materia, aula }))
         } catch (e) {
           responder(res, 502, { erro: e.message })
         }
