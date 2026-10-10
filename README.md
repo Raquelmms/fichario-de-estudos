@@ -6,10 +6,10 @@ matéria, folha pautada, capa personalizada, post-its, adesivos e marca-texto de
 Serve pra faculdade, escola, curso online, certificação, idioma, concurso… qualquer coisa que tenha
 **matérias → aulas → prazos**.
 
-- **Matérias com capa personalizável**: cor, estampa (bolinhas, listras, xadrez…), emoji, etiqueta e adesivos que você arrasta
+- **Matérias com capa personalizável**: cor (das prontas ou criada por você), estampa (bolinhas, listras, xadrez…), emoji, etiqueta e adesivos que você arrasta
 - **Aulas** em páginas pautadas: escreve e edita à vontade, com títulos, listas, tarefas `☑` e caneta colorida
 - **Marca-texto em 6 cores**, cada uma com um significado (importante, definição, exemplo, cai na prova, número, dúvida)
-- **Post-its e adesivos** que você cola e arrasta pela página (emojis, selos tipo "cai na prova" e fitas washi)
+- **Post-its e adesivos** que você cola e arrasta pela página: a turminha (personagens fofos originais), emojis, selos tipo "cai na prova" e fitas washi
 - **✨ Resumir material**: cola o texto da aula e ele vira uma página resumida, já grifada, com post-its e teste rápido
 - **Prazos** com peso e nota (calcula sua média), próximo prazo em destaque e calendário
 - **Conectores opcionais**: puxa eventos da sua agenda (Google, Outlook, Apple) e do Linear
@@ -33,12 +33,16 @@ Precisa do [Node.js](https://nodejs.org) 20 ou mais novo.
 ## Resumir material
 
 Em cada aula, o botão **✨ resumir material** abre uma caixa pra colar o texto (livro, slides, transcrição,
-anotações soltas). O material fica guardado na aula. Pra resumir, você tem duas opções:
+anotações soltas). O material fica guardado na aula. Depois:
 
-- **Pelo Claude Code** (sem configurar nada): abra o Claude Code na pasta do fichário e rode
-  `/resumir <matéria> <aula>`. Ele lê o material e escreve a página grifada, com post-its e teste rápido.
-- **Pelo botão**: crie uma chave em [console.anthropic.com](https://console.anthropic.com/settings/keys),
-  coloque `ANTHROPIC_API_KEY=…` no `.env.local` e reinicie o `npm run dev`. A API é paga por uso.
+1. Clique em **📋 copiar pedido pro agente**.
+2. Cole no seu agente (Claude Code, Codex, Cursor…) aberto na pasta do fichário.
+
+Ele segue as instruções do [`AGENTS.md`](AGENTS.md) e escreve a página grifada com a legenda de cores, post-its
+e teste rápido. **Não precisa de chave de API.** No Claude Code também dá pra usar `/resumir <matéria> <aula>`.
+
+Opcional: com uma `ANTHROPIC_API_KEY` no `.env.local`, aparece um botão que resume dentro do próprio app
+(usa a API do Claude, paga por uso).
 
 Ou escreva você mesma: a página é toda editável.
 
@@ -101,5 +105,5 @@ src/
 servidor/         servidor local: lê e grava dados/, roda conectores e o resumo com IA
 conectores/       agenda.mjs, linear.mjs, _modelo.mjs
 dados/            seus dados (JSON)
-.claude/skills/   /resumir e /nova-materia pro Claude Code
+.claude/skills/   instruções de resumir e de criar matéria (qualquer agente lê pelo AGENTS.md)
 ```

@@ -13,7 +13,7 @@ export default function Capa({ m, grande = false, editavel = false, mudarCapa })
       className={`capa cor-${m.cor} estampa-${capa.padrao || 'liso'} ${grande ? 'capa-grande' : ''}`}
     >
       <span className="capa-lombada" aria-hidden="true" />
-      <span className="capa-emoji" aria-hidden="true">{m.emoji}</span>
+      <span className="capa-emoji" aria-hidden="true">{m.emoji || '📒'}</span>
       <div className="capa-etiqueta">
         <span className="etiqueta-linha"><small>matéria</small><strong>{m.nome}</strong></span>
         {(m.professor || grande) && <span className="etiqueta-linha"><small>prof.</small>{m.professor || '—'}</span>}

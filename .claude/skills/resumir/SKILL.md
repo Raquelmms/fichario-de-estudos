@@ -18,7 +18,7 @@ Escreve o resumo de uma aula direto no arquivo da matéria, no formato do `CLAUD
 ## 2. Achar o material
 
 Na ordem: o que veio depois do comando (texto, caminho de arquivo, link) → o campo `material` da aula
-(o que a pessoa colou no painel "✨ resumir material") → se não tiver nada, peça pra colar.
+(o que a pessoa colou no painel "✨ resumir material" do app) → se não tiver nada, peça pra colar.
 Leia tudo antes de escrever. Guarde o texto usado em `material` (se veio de arquivo/link, guarde a referência).
 
 ## 3. Escrever

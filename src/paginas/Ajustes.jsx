@@ -28,18 +28,17 @@ export default function Ajustes({ ctx }) {
 
       {EDITAVEL && (
         <div className="folha">
-          <h2 className="sub-mao">Resumo com IA {ia.ativo ? <span className="selo selo-ok">ligado · {ia.modelo}</span> : <span className="selo selo-off">desligado</span>}</h2>
+          <h2 className="sub-mao">Resumir com IA</h2>
           <p>
-            O botão <b>✨ resumir material</b> de cada aula transforma o texto colado numa página resumida, com grifos coloridos,
-            post-its e teste rápido. Ele usa a API do Claude, que é paga por uso.
+            Em cada aula, <b>✨ resumir material</b> guarda o texto que você colar. Depois é só pedir pro seu agente
+            (Claude Code, Codex, Cursor…) aberto nesta pasta: ele segue as instruções do <code>AGENTS.md</code> e escreve a
+            página grifada, com post-its e teste rápido. <b>Não precisa de chave.</b>
           </p>
-          {!ia.ativo && (
-            <ol>
-              <li>Crie uma chave em <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noreferrer">console.anthropic.com</a>.</li>
-              <li>Coloque <code>ANTHROPIC_API_KEY=sk-ant-…</code> no <code>.env.local</code> e reinicie o <code>npm run dev</code>.</li>
-            </ol>
-          )}
-          <p className="dica">Sem chave? Com o Claude Code aberto na pasta do fichário, use <code>/resumir</code>: ele faz o mesmo direto nos arquivos.</p>
+          <p className="dica">
+            Opcional: com <code>ANTHROPIC_API_KEY</code> no <code>.env.local</code> aparece também um botão que resume dentro do
+            próprio app, usando a API do Claude (paga por uso).{' '}
+            {ia.ativo ? <span className="selo selo-ok">ligado · {ia.modelo}</span> : <span className="selo selo-off">desligado</span>}
+          </p>
         </div>
       )}
 

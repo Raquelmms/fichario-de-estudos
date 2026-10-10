@@ -103,6 +103,19 @@ export default function Aula({ ctx, m, aulaId }) {
 function PainelResumo({ m, a, mudar, ia, fechar }) {
   const [material, setMaterial] = useState(a.material || '')
   const [estado, setEstado] = useState(null) // null · 'resumindo' · { erro }
+  const [copiado, setCopiado] = useState(false)
+
+  const copiarPedido = async () => {
+    guardar()
+    const pedido = `Resuma a aula "${a.titulo}" da matéria "${m.nome}" do meu fichário (arquivo dados/${m._arquivo || `materias/${m.id}.json`}), seguindo as instruções de resumo do AGENTS.md. O material está no campo "material" dessa aula.`
+    try {
+      await navigator.clipboard.writeText(pedido)
+    } catch {
+      prompt('Copie o pedido:', pedido)
+    }
+    setCopiado(true)
+    setTimeout(() => setCopiado(false), 2500)
+  }
 
   const guardar = () => material !== (a.material || '') && mudar(x => { x.material = material })
 
@@ -148,23 +161,23 @@ function PainelResumo({ m, a, mudar, ia, fechar }) {
         placeholder="Cole o material aqui…"
         aria-label="material da aula"
       />
-      {ia.ativo ? (
+      <div className="sem-ia">
+        <p><b>Peça pro seu agente</b> (Claude Code, Codex, Cursor…) aberto na pasta do fichário. Não precisa de chave nem de configurar nada.</p>
         <div className="linha-acoes">
-          <button className="btn" onClick={resumir} disabled={!material.trim() || estado === 'resumindo'}>
-            {estado === 'resumindo' ? 'resumindo… (pode levar um minutinho)' : '✨ resumir com IA'}
-          </button>
-          <span className="dica">Usa o Claude ({ia.modelo}). Grifa com a legenda das cores, cria post-its e um teste rápido.</span>
+          <button className="btn" onClick={copiarPedido} disabled={!material.trim()}>📋 copiar pedido pro agente</button>
+          {copiado && <span className="ok-mao">copiado!</span>}
         </div>
-      ) : (
-        <div className="sem-ia">
-          <p><b>Duas formas de resumir:</b></p>
-          <ol>
-            <li>No <b>Claude Code</b>, dentro da pasta do fichário: <code>/resumir {m.id} {a.titulo}</code>. Ele lê o material guardado aqui e escreve o resumo na página.</li>
-            <li>Ou ligue o botão: coloque <code>ANTHROPIC_API_KEY=…</code> no <code>.env.local</code> e reinicie o <code>npm run dev</code>.</li>
-          </ol>
-          <p className="dica">Ou escreva você mesma. A página é toda editável. 😉</p>
+        <p className="dica">É só colar no agente. No Claude Code também dá pra usar <code>/resumir {m.id} {a.titulo}</code>.</p>
+      </div>
+      {ia.ativo && (
+        <div className="linha-acoes">
+          <button className="btn-claro" onClick={resumir} disabled={!material.trim() || estado === 'resumindo'}>
+            {estado === 'resumindo' ? 'resumindo… (pode levar um minutinho)' : '✨ resumir aqui mesmo'}
+          </button>
+          <span className="dica">Usa a API do Claude ({ia.modelo}), paga por uso.</span>
         </div>
       )}
+      <p className="dica">Ou escreva você mesma: a página é toda editável. 😉</p>
       {estado?.erro && <p className="erro">⚠ {estado.erro}</p>}
     </div>
   )

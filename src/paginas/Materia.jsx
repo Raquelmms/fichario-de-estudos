@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { EDITAVEL, CORES, PADROES, TIPOS, media, novoId, novaAula, textoDe } from '../dados.js'
 import { diaMes, diaSemanaCurto, hora, lerData } from '../datas.js'
 import Campo from '../componentes/Campo.jsx'
 import Capa from '../componentes/Capa.jsx'
 import { Cartela } from '../componentes/Adesivos.jsx'
+import SeletorEmoji from '../componentes/SeletorEmoji.jsx'
 
 export default function Materia({ ctx, m }) {
   const { mudarMateria, excluirMateria } = ctx
@@ -50,13 +51,18 @@ export default function Materia({ ctx, m }) {
             <label className="rotulo">nome da matéria<Campo valor={m.nome} onSalvar={v => mudar(x => { x.nome = v })} /></label>
             <div className="linha-acoes">
               <label className="rotulo" style={{ flex: '1 1 160px' }}>professor(a)<Campo valor={m.professor} onSalvar={v => mudar(x => { x.professor = v })} /></label>
-              <label className="rotulo" style={{ flex: '0 0 90px' }}>emoji<Campo valor={m.emoji} onSalvar={v => mudar(x => { x.emoji = v })} /></label>
+              <span className="rotulo" style={{ flex: '0 0 auto' }}>
+                emoji
+                <br />
+                <SeletorEmoji valor={m.emoji} onEscolher={v => mudar(x => { x.emoji = v })} />
+              </span>
             </div>
             <span className="rotulo">cor</span>
             <div className="cores" role="group" aria-label="cor da capa">
               {CORES.map(cor => (
                 <button key={cor} className={`cor-bolinha cor-${cor}`} aria-pressed={m.cor === cor} aria-label={cor} onClick={() => mudar(x => { x.cor = cor })} />
               ))}
+              <CorLivre cor={m.cor} onEscolher={cor => mudar(x => { x.cor = cor })} />
             </div>
             <span className="rotulo">estampa</span>
             <div className="estampas" role="group" aria-label="estampa da capa">
@@ -150,6 +156,22 @@ export default function Materia({ ctx, m }) {
         </p>
       )}
     </section>
+  )
+}
+
+// Cor livre: guarda como "c-rrggbb" (o App cria a classe .cor-c-rrggbb com essa cor).
+function CorLivre({ cor, onEscolher }) {
+  const atual = /^c-[0-9a-f]{6}$/.test(cor) ? '#' + cor.slice(2) : '#ff7aa5'
+  const timer = useRef(null)
+  const escolher = hex => {
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => onEscolher('c-' + hex.slice(1).toLowerCase()), 300)
+  }
+  return (
+    <label className={`cor-livre ${cor?.startsWith('c-') ? 'cor-livre-ativa' : ''}`} title="criar cor">
+      <input type="color" defaultValue={atual} onChange={e => escolher(e.target.value)} aria-label="criar cor" />
+      <span>🎨 criar cor</span>
+    </label>
   )
 }
 

@@ -50,8 +50,12 @@ export default function App() {
   else if (a === 'm') pagina = <p>Essa matéria não existe (ou foi apagada). <a href="#/">Voltar pro início</a></p>
   else pagina = <Inicio ctx={ctx} />
 
+  // Cores livres ("c-rrggbb") viram classes .cor-c-rrggbb
+  const coresLivres = [...new Set(dados.materias.map(x => x.cor).filter(c => /^c-[0-9a-f]{6}$/.test(c || '')))]
+
   return (
     <div className="fichario">
+      {coresLivres.length > 0 && <style>{coresLivres.map(c => `.cor-${c}{--cor:#${c.slice(2)}}`).join('')}</style>}
       <div className="argolas" aria-hidden="true">
         {[0, 1, 2, 3].map(i => <span key={i} className="argola" />)}
       </div>
@@ -70,7 +74,7 @@ export default function App() {
         <a href="#/" className={`aba aba-inicio ${!a ? 'aba-ativa' : ''}`}>início</a>
         {dados.materias.map(x => (
           <a key={x.id} href={`#/m/${x.id}`} className={`aba cor-${x.cor} ${m?.id === x.id ? 'aba-ativa' : ''}`} title={x.nome}>
-            <span aria-hidden="true">{x.emoji}</span> {x.nome}
+            <span aria-hidden="true">{x.emoji || '📒'}</span> {x.nome}
           </a>
         ))}
       </nav>
