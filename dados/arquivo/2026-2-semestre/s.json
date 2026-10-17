@@ -1,0 +1,17 @@
+{
+  "id": "s",
+  "nome": "s",
+  "professor": "",
+  "emoji": "📒",
+  "cor": "laranja",
+  "capa": {
+    "padrao": "quadriculado",
+    "adesivos": []
+  },
+  "aulas": [],
+  "prazos": [],
+  "arquivada": {
+    "grupo": "2026 · 2º semestre",
+    "em": "2026-10-10"
+  }
+}

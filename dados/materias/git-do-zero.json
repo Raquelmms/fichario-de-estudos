@@ -2,10 +2,10 @@
   "id": "git-do-zero",
   "nome": "Git e GitHub do zero",
   "professor": "Pro Git (livro)",
-  "emoji": "🌱",
-  "cor": "verde",
+  "emoji": "💖",
+  "cor": "roxo",
   "capa": {
-    "padrao": "quadriculado",
+    "padrao": "bolinhas",
     "adesivos": [
       {
         "id": "a1",
@@ -30,9 +30,45 @@
         "id": "a3",
         "tipo": "fita",
         "valor": "rosa",
-        "x": 72,
-        "y": 5,
+        "x": 81.4,
+        "y": 8.1,
         "r": 20,
+        "s": 1
+      },
+      {
+        "id": "nl45ss",
+        "tipo": "emoji",
+        "valor": "🏆",
+        "x": 32.69289146579994,
+        "y": 38.97631170315407,
+        "r": -16,
+        "s": 1
+      },
+      {
+        "id": "lkx042",
+        "tipo": "personagem",
+        "valor": "nyx",
+        "x": 23.4,
+        "y": 23.7,
+        "r": -2,
+        "s": 1
+      },
+      {
+        "id": "wc0dzc",
+        "tipo": "personagem",
+        "valor": "lulu",
+        "x": 70.1,
+        "y": 48.5,
+        "r": 15,
+        "s": 1
+      },
+      {
+        "id": "utscjx",
+        "tipo": "personagem",
+        "valor": "fofa",
+        "x": 18.5,
+        "y": 51.4,
+        "r": 5,
         "s": 1
       }
     ]
@@ -42,14 +78,14 @@
       "id": "au1",
       "titulo": "O que é controle de versão",
       "data": "2026-10-06",
-      "conteudo": "<h2>Por que controlar versões</h2><p>Sem controle de versão a gente vive de <code>trabalho_final_v2_AGORA_VAI.docx</code>. Um <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">sistema de controle de versão</mark> guarda cada mudança, então dá pra <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">voltar um arquivo ou o projeto inteiro</mark> pra como ele estava antes.</p><ul><li><p><strong>local</strong>: a história fica só no seu computador (o HD morreu, a história foi junto)</p></li><li><p><strong>centralizado</strong>: fica num servidor (servidor fora do ar = ninguém trabalha)</p></li><li><p><strong>distribuído</strong> (Git): <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">cada cópia tem a história inteira</mark></p></li></ul><h2>Fotos, não diferenças</h2><p>A cada commit o Git tira uma <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">foto (snapshot) do projeto inteiro</mark>. Arquivo que não mudou não é copiado de novo, vira só um link pra versão anterior. <mark data-color=\"#a5d8ff\" style=\"background-color: rgb(165, 216, 255); color: inherit;\">Exemplo: git log funciona até sem internet</mark>, porque a história está toda na sua máquina.</p><h2>Os três estados</h2><p>Todo arquivo está em um destes: <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">modified</mark> (mudou), <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">staged</mark> (marcado pro próximo commit) ou <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">committed</mark> (guardado na história). <mark data-color=\"#fcc2d7\" style=\"background-color: rgb(252, 194, 215); color: inherit;\">Isso cai na prova!</mark></p><ol><li><p>você muda arquivos no working directory</p></li><li><p><code>git add</code> leva pra staging area</p></li><li><p><code>git commit</code> guarda a foto no repositório</p></li></ol><p><mark data-color=\"#d0bfff\" style=\"background-color: rgb(208, 191, 255); color: inherit;\">Dúvida: qual a diferença entre git restore e git reset?</mark></p><ul data-type=\"taskList\"><li data-checked=\"true\" data-type=\"taskItem\"><label><input type=\"checkbox\" checked=\"checked\"><span></span></label><div><p>instalar o Git</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>ler o capítulo 1 do Pro Git</p></div></li></ul><p></p>",
+      "conteudo": "<h2><mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">Por que controlar versões</mark></h2><p>Sem controle de versão a gente vive de <code>trabalho_final_v2_AGORA_VAI.docx</code>. Um <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">sistema de controle de versão</mark> guarda cada mudança, então dá pra <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">voltar um arquivo ou o projeto inteiro</mark> pra como ele estava antes.</p><ul><li><p><strong>local</strong>: a história fica só no seu computador (o HD morreu, a história foi junto)</p></li><li><p><strong>centralizado</strong>: fica num servidor (servidor fora do ar = ninguém trabalha)</p></li><li><p><strong>distribuído</strong> (Git): <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">cada cópia tem a história inteira</mark></p></li><li><p></p></li></ul><h2>Fotos, não diferenças</h2><p>A cada commit o Git tira uma <mark data-color=\"#ffe066\" style=\"background-color: rgb(255, 224, 102); color: inherit;\">foto (snapshot) do projeto inteiro</mark>. Arquivo que não mudou não é copiado de novo, vira só um link pra versão anterior. <mark data-color=\"#a5d8ff\" style=\"background-color: rgb(165, 216, 255); color: inherit;\">Exemplo: git log funciona até sem internet</mark>, porque a história está toda na sua máquina.</p><h2>Os três estados</h2><p>Todo arquivo está em um destes: <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">modified</mark> (mudou), <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">staged</mark> (marcado pro próximo commit) ou <mark data-color=\"#b2f2bb\" style=\"background-color: rgb(178, 242, 187); color: inherit;\">committed</mark> (guardado na história). <mark data-color=\"#fcc2d7\" style=\"background-color: rgb(252, 194, 215); color: inherit;\">Isso cai na prova!</mark></p><ol><li><p>você muda arquivos no working directory</p></li><li><p><code>git add</code> leva pra staging area</p></li><li><p><code>git commit</code> guarda a foto no repositório</p></li></ol><p><mark data-color=\"#d0bfff\" style=\"background-color: rgb(208, 191, 255); color: inherit;\">Dúvida: qual a diferença entre git restore e git reset?</mark></p><ul data-type=\"taskList\"><li data-checked=\"true\" data-type=\"taskItem\"><label><input type=\"checkbox\" checked=\"checked\"><span></span></label><div><p>instalar o Git</p></div></li><li data-checked=\"false\" data-type=\"taskItem\"><label><input type=\"checkbox\"><span></span></label><div><p>ler o capítulo 1 do Pro Git</p></div></li></ul><p></p>",
       "postits": [
         {
           "id": "p1",
           "cor": "amarelo",
           "texto": "lembra assim:\nadd = separar as fotos\ncommit = colar no álbum",
-          "x": 77,
-          "y": 30,
+          "x": 91.9,
+          "y": 56,
           "r": 2
         },
         {
@@ -59,6 +95,22 @@
           "x": 78,
           "y": 420,
           "r": -3
+        },
+        {
+          "id": "bv1zy9",
+          "cor": "amarelo",
+          "texto": "",
+          "x": 77.1,
+          "y": 216,
+          "r": 2
+        },
+        {
+          "id": "92tv7r",
+          "cor": "lilas",
+          "texto": "",
+          "x": 86.3,
+          "y": 722,
+          "r": -2
         }
       ],
       "adesivos": [
@@ -67,8 +119,8 @@
           "tipo": "selo",
           "valor": "cai na prova",
           "cor": "rosa",
-          "x": 86,
-          "y": 640,
+          "x": 88.8,
+          "y": 648,
           "r": -10,
           "s": 1
         },
@@ -80,6 +132,15 @@
           "y": 250,
           "r": 0,
           "s": 0.8
+        },
+        {
+          "id": "4mkv2e",
+          "tipo": "personagem",
+          "valor": "nyx",
+          "x": 2.7,
+          "y": 34,
+          "r": 14,
+          "s": 1
         }
       ],
       "material": "",

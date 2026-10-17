@@ -63,7 +63,14 @@
       "id": "q1",
       "titulo": "Apresentar um PR em inglês",
       "tipo": "projeto",
-      "data": "2026-10-23",
+      "data": "2026-10-24T23:59",
+      "feito": false
+    },
+    {
+      "id": "mjgvmy",
+      "titulo": "Novo prazo",
+      "tipo": "tarefa",
+      "data": "2026-10-10",
       "feito": false
     }
   ]

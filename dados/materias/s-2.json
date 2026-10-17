@@ -1,0 +1,13 @@
+{
+  "id": "s-2",
+  "nome": "s",
+  "professor": "",
+  "emoji": "📒",
+  "cor": "rosa",
+  "capa": {
+    "padrao": "diagonal",
+    "adesivos": []
+  },
+  "aulas": [],
+  "prazos": []
+}

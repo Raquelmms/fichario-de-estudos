@@ -1,0 +1,42 @@
+{
+  "id": "musica",
+  "nome": "musica",
+  "professor": "",
+  "emoji": "",
+  "cor": "verde",
+  "capa": {
+    "padrao": "listras",
+    "adesivos": []
+  },
+  "aulas": [
+    {
+      "id": "ijtncj",
+      "titulo": "Aula 1",
+      "data": "2026-10-10",
+      "conteudo": "",
+      "postits": [],
+      "adesivos": [],
+      "material": "MCP: a tomada universal para ferramentas de agentes\nOutra peça importante do harness moderno é como ele se conecta a serviços externos. Você quer que o agente leia uma issue no Linear, abra um PR no GitHub, consulte um doc no Notion. Como ele faz?\n\nEm 2023 (que na velocidade da IA já é \"antigamente\"), cada agente implementava integração caso a caso. Em 2024, a Anthropic lançou o protocolo MCP (Model Context Protocol), um padrão aberto que permite que qualquer serviço exponha funcionalidades de forma padronizada e qualquer agente compatível consegue usar. \n\nA analogia é a de uma tomada universal: antes cada eletrodoméstico tinha um plugue diferente, agora todos encaixam na mesma. Hoje você instala um servidor MCP do GitHub e qualquer agente que fale MCP (Claude Code, Codex, Cursor) consegue ler issues e criar PRs.\n\nO Codex faz algo interessante: é tanto cliente quanto servidor MCP. Como cliente, consome MCP servers configurados. Como servidor, expõe o próprio Codex como ferramenta para outros agentes. \n\nEm tese, dá para rodar o Claude Code e configurar o Codex como uma das ferramentas dele. Agente chamando agente. Muita gente fala que essa multiplicidade agêntica é o futuro do desenvolvimento.\n\nSkills: ensinando truques específicos ao agente\nExiste um segundo jeito de estender o que o agente sabe fazer, diferente do MCP: as skills. \n\nUma skill, no Codex ou no Claude Code, é basicamente uma pasta com um arquivo SKILL.md em Markdown que descreve para o agente como fazer uma tarefa específica do jeito que você quer (\"revisar PR seguindo o checklist da empresa\", \"rodar o lint customizado\"), junto com scripts auxiliares. \n\nO agente carrega essas skills automaticamente e, quando o pedido bate com o que a skill cobre, invoca a skill como ferramenta. \n\nÉ basicamente um guia passo a passo de engenharia de prompt para aquele caso específico. A combinação MCP + skills é o que faz um agente praticamente virar um membro do time, e não um assistente genérico.\n\nMemória: o agente que lembra (e o que esquece)\nCada conversa fica salva num arquivo no seu disco. Você pode mandar \"codex resume\" e ele retoma de onde parou ontem. Dá também para forkar uma sessão (\"queria ter tomado outra decisão lá no meio\"), parecido com criar um branch no GitHub, só que para conversas com o agente. \n\nExiste também a memória de longo prazo: coisas que aconteceram numa sessão (preferências, decisões, lições aprendidas) são destiladas e ficam disponíveis nas próximas sessões. \n\nO Codex implementa isso em dois estágios: extrai candidatos a cada sessão e, periodicamente, um sub-agente dedicado consolida tudo em um documento persistente. Essa parte é o calcanhar de Aquiles de qualquer agente hoje, e é onde veremos muitas novidades nos próximos meses.\n\nO que isso muda para quem programa em 2026\nDa próxima vez que alguém te disser \"essa nova ferramenta de IA usa o modelo X, então é boa\", você vai saber que isso é metade da história. A outra metade está no harness. E agora você sabe onde olhar.\n\nPara profissionais que querem se aprofundar nesse novo paradigma, as Carreiras da Alura cobrem desde engenharia de prompt e Python até trilhas em inteligência artificial generativa, engenharia de IA e desenvolvimento com modelos como ChatGPT 5 e a família Claude. \n\nPara quem quer construir carreira em tecnologia hoje, dominar o uso de agentes e entender o que acontece debaixo do capô é diferencial competitivo. O movimento de citizen developer também se conecta: muitos profissionais não-devs estão aprendendo a usar harnesses para automatizar fluxos.\n\nE claro, para uma formação acadêmica para as lideranças do futuro da tecnologia, a FIAP oferece pós-graduações em IA e transformação digital.",
+      "teste": []
+    },
+    {
+      "id": "bwz8bx",
+      "titulo": "Aula 2",
+      "data": "2026-10-10",
+      "conteudo": "",
+      "postits": [],
+      "adesivos": [],
+      "material": "",
+      "teste": []
+    }
+  ],
+  "prazos": [
+    {
+      "id": "ckc56t",
+      "titulo": "Novo prazo",
+      "tipo": "tarefa",
+      "data": "2026-10-12T23:59",
+      "feito": false
+    }
+  ]
+}
